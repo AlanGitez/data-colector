@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    container_name: db-datacol
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db-datacol
+    ports:
+      - 3307:3306
