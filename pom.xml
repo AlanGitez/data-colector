@@ -5,6 +5,7 @@
   <groupId>org.datacol</groupId>
   <artifactId>data-colector</artifactId>
   <version>0.0.0</version>
+
   <properties>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -16,6 +17,7 @@
     <skipITs>true</skipITs>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
