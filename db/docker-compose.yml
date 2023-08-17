@@ -1,11 +1,13 @@
 version: '3'
 services:
   db:
-    image: postgres:latest
-    container_name: db-datacol
+    image: 'bitnami/postgresql:latest'
+    container_name: datacol-db
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=db-datacol
+      - POSTGRESQL_USERNAME=user
+      - POSTGRESQL_PASSWORD=user
+      - POSTGRESQL_DATABASE=postgres
     ports:
-      - 3307:3306
+      - 5432:5432
+    volumes:
+      - ./data.sql:/docker-entrypoint-initdb.d/data.sql
