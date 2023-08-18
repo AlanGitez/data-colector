@@ -13,6 +13,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.datacol.aux.Consts;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class API extends AbstractVerticle {
     private static final Logger logger = LoggerFactory.getLogger(API.class);
     private DeliveryOptions DOPTS = new DeliveryOptions();
+
     @ConfigProperty(name = "api.port")
     int PORT;
 
@@ -60,7 +62,7 @@ public class API extends AbstractVerticle {
     private void getAllData(RoutingContext rc) {
         MultiMap params = rc.queryParams();
         var msg = new JsonObject()
-                .put("pageSize", params.get("pageSize"));
+                .put(Consts.PAGE_SIZE, params.get(Consts.PAGE_SIZE));
         bus.request("get-all", msg, DOPTS)
                 .onSuccess(ar -> {
                     var response = (JsonObject) ar.body();
@@ -102,17 +104,35 @@ public class API extends AbstractVerticle {
      * @Param: Array of data.
      * */
     private void bulkInsertData(RoutingContext rc) {
+        var dataList = rc.body().asJsonArray();
+        var msg = new JsonObject().put("data", dataList);
+        bus.request("insert-bulk", msg, DOPTS)
+                .onSuccess(ar -> {
+                    var response = (JsonObject) ar.body();
+                    logger.info("Response: " + response);
 
+                    reply(rc, response);
+                })
+                .onFailure(e -> {
+                    logger.error("Insert bulk data error: " + e.getMessage());
+                    var error = new JsonObject().put("error", e.getMessage());
+
+                    reply(rc, error);
+                });
+    }
+
+    private void generateReport(RoutingContext routingContext) {
+        bus.publish("generate-report", null);
     }
 
     private void setRoutes(Router router) {
+        router.get("/report").handler(this::generateReport);
         router.get("/data").handler(this::getAllData);
         router.get("/data/:id").handler(this::getDataById);
         router.post("/data").handler(this::insertData);
         router.post("/data/bulk").handler(this::bulkInsertData);
 
     }
-
 
     private void reply(RoutingContext rc, JsonObject response) {
         setBasicHeaders(rc);
