@@ -10,8 +10,10 @@ import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.*;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.datacol.aux.Consts;
 import org.datacol.aux.Translate;
+import org.datacol.config.DatacolDBConfig;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.concurrent.CompletionStage;
@@ -21,16 +23,8 @@ import java.util.concurrent.CompletionStage;
 public class DataVerticle extends AbstractVerticle {
     private static final Logger logger = LoggerFactory.getLogger(DataVerticle.class);
 
-    @ConfigProperty(name = "quarkus.datasource.host")
-    String host;
-    @ConfigProperty(name = "quarkus.datasource.port")
-    int port;
-    @ConfigProperty(name = "quarkus.datasource.db")
-    String dbName;
-    @ConfigProperty(name = "quarkus.datasource.user")
-    String user;
-    @ConfigProperty(name = "quarkus.datasource.password")
-    String pass;
+    @Inject
+    DatacolDBConfig dataConnection;
 
     private SqlConnection client;
 
@@ -41,11 +35,11 @@ public class DataVerticle extends AbstractVerticle {
             var poolOptions = new PoolOptions();
             var pgOptions = new PgConnectOptions();
 
-            pgOptions.setHost(host)
-                    .setPort(port)
-                    .setDatabase(dbName)
-                    .setUser(user)
-                    .setPassword(pass);
+            pgOptions.setHost(dataConnection.host())
+                    .setPort(dataConnection.port())
+                    .setDatabase(dataConnection.database())
+                    .setUser(dataConnection.user())
+                    .setPassword(dataConnection.password());
 
             PgPool client = PgPool.pool(vertx, pgOptions, poolOptions);
             client.getConnection()
