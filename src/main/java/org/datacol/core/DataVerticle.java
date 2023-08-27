@@ -2,7 +2,6 @@ package org.datacol.core;
 
 import io.quarkus.vertx.ConsumeEvent;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
@@ -61,7 +60,6 @@ public class DataVerticle extends AbstractVerticle {
             promise.fail(e.getMessage());
         }
     }
-
 
     @ConsumeEvent("get-all")
     public CompletionStage<JsonObject> getAllData(JsonObject msg) {

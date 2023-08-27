@@ -56,7 +56,7 @@ public class ReportVerticle extends AbstractVerticle {
     /**
      * This method generate a .CSV file with de database data.
      * @param msg: configuration json for the report data query.
-     * */
+     **/
     private void generateReport(JsonObject msg) {
         var reportConfig = new JsonObject();
 

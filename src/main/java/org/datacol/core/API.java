@@ -16,9 +16,6 @@ import jakarta.inject.Inject;
 import org.datacol.aux.Consts;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import java.util.List;
-import java.util.Map;
-
 @ApplicationScoped
 public class API extends AbstractVerticle {
     private static final Logger logger = LoggerFactory.getLogger(API.class);
