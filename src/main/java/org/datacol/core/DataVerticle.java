@@ -13,7 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.datacol.aux.Consts;
 import org.datacol.aux.Translate;
-import org.datacol.config.DatacolDBConfig;
+import org.datacol.config.DBConfig;
 
 import java.util.concurrent.CompletionStage;
 
@@ -23,7 +23,7 @@ public class DataVerticle extends AbstractVerticle {
     private static final Logger logger = LoggerFactory.getLogger(DataVerticle.class);
 
     @Inject
-    DatacolDBConfig dataConnection;
+    DBConfig dbConfig;
 
     private SqlConnection client;
 
@@ -34,11 +34,11 @@ public class DataVerticle extends AbstractVerticle {
             var poolOptions = new PoolOptions();
             var pgOptions = new PgConnectOptions();
 
-            pgOptions.setHost(dataConnection.host())
-                    .setPort(dataConnection.port())
-                    .setDatabase(dataConnection.database())
-                    .setUser(dataConnection.user())
-                    .setPassword(dataConnection.password());
+            pgOptions.setHost(dbConfig.datacol().host())
+                    .setPort(dbConfig.datacol().port())
+                    .setDatabase(dbConfig.datacol().database())
+                    .setUser(dbConfig.datacol().user())
+                    .setPassword(dbConfig.datacol().password());
 
             PgPool client = PgPool.pool(vertx, pgOptions, poolOptions);
             client.getConnection()
