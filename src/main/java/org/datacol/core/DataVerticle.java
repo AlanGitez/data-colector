@@ -40,15 +40,18 @@ public class DataVerticle extends AbstractVerticle {
                     .setUser(dbConfig.datacol().user())
                     .setPassword(dbConfig.datacol().password());
 
-            PgPool client = PgPool.pool(vertx, pgOptions, poolOptions);
-            client.getConnection()
-                    .onSuccess(ar -> {
-                        this.client = ar;
+            PgPool pool = PgPool.pool(vertx, pgOptions, poolOptions);
+            pool.getConnection()
+                    .onSuccess(conn -> {
+                        this.client = conn;
                         promise.complete();
                     })
-                    .onFailure(e -> promise.fail("Error connecting pg client cause " + e.getMessage()));
+                    .onFailure(e -> {
+                        logger.error("Cannot connect with datacol database ... " + e.getMessage());
+                        promise.fail( e.getMessage());
+                    });
         } catch (Exception e) {
-            logger.error("Error initializing db client: " + e.getMessage());
+            logger.error("Error initializing user db client: " + e.getMessage());
             e.printStackTrace();
             promise.fail(e.getMessage());
         }

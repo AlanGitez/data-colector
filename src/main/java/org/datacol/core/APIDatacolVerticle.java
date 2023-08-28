@@ -17,8 +17,8 @@ import org.datacol.aux.Consts;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
-public class API extends AbstractVerticle {
-    private static final Logger logger = LoggerFactory.getLogger(API.class);
+public class APIDatacolVerticle extends AbstractVerticle {
+    private static final Logger logger = LoggerFactory.getLogger(APIDatacolVerticle.class);
     private DeliveryOptions DOPTS = new DeliveryOptions();
 
     @ConfigProperty(name = "api.port")
