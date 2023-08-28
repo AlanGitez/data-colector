@@ -16,11 +16,10 @@ services:
     image: 'bitnami/postgresql:latest'
     container_name: user-db
     environment:
-      - POSTGRESQL_USERNAME=user
-      - POSTGRESQL_PASSWORD=user
+      - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_DATABASE=user-db
     ports:
       - 5434:5432
     volumes:
-          - ./users-init.sql:/docker-entrypoint-initdb.d/users-init.sql
+      - ./users-init.sql:/docker-entrypoint-initdb.d/users-init.sql
 

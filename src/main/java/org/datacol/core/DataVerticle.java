@@ -14,7 +14,6 @@ import jakarta.inject.Inject;
 import org.datacol.aux.Consts;
 import org.datacol.aux.Translate;
 import org.datacol.config.DatacolDBConfig;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.concurrent.CompletionStage;
 
@@ -98,7 +97,7 @@ public class DataVerticle extends AbstractVerticle {
             var message = msg.getString("message");
             var dni = msg.getLong("dni");
 
-            PreparedQuery<RowSet<Row>> query = client.preparedQuery("INSERT INTO data (name, province, phone, email, message, dni) VALUES ($1, $2, $3, $4, $5, $6)");
+            PreparedQuery<RowSet<Row>> query = client.preparedQuery("INSERT INTO dataType_A.data (name, province, phone, email, message, dni) VALUES ($1, $2, $3, $4, $5, $6)");
             query.execute(Tuple.of(name, province, phone, email, message, dni))
                     .onSuccess(rowset -> promise.complete(msg))
                     .onFailure(e -> promise.fail(e.getMessage()));
